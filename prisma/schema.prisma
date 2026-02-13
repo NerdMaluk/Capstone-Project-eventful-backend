@@ -4,5 +4,88 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
- 
+
+enum Role {
+  CREATOR
+  EVENTEE
+}
+
+enum TicketStatus {
+  PENDING
+  ACTIVE
+  USED
+  CANCELLED
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(EVENTEE)
+  
+  events    Event[]  @relation("UserEvents")
+  tickets   Ticket[] @relation("UserTickets")
+  notifications Notification[]
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Event {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  date        DateTime
+  location    String
+  price       Float
+  capacity    Int      @default(100)
+  
+  creatorId   String
+  creator     User     @relation("UserEvents", fields: [creatorId], references: [id])
+  
+  tickets     Ticket[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("events")
+}
+
+model Ticket {
+  id         String       @id @default(uuid())
+  eventId    String
+  attendeeId String      
+  
+  
+  reference  String?      @unique 
+  price      Float?      
+
+  qrCode     String?     
+  scannedAt  DateTime?    
+  status     TicketStatus @default(ACTIVE)
+
+  event      Event        @relation(fields: [eventId], references: [id])
+  attendee   User         @relation("UserTickets", fields: [attendeeId], references: [id])
+
+  createdAt  DateTime     @default(now())
+
+  @@map("tickets")
+}
+model Notification {
+  id        String   @id @default(uuid())
+  title     String
+  message   String
+  read      Boolean  @default(false)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@map("notifications")
+}
+
+
+
