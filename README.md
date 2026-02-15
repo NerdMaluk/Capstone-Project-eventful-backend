@@ -2,7 +2,7 @@ Project Report: Eventful – Modern Event Ticketing Platform
 
 # --- DATABASE CONFIGURATION ---
 # Replace with your local PostgreSQL credentials
-DATABASE_URL="postgresql://postgres:password@localhost:5432/morabeza_db?schema=public"
+DATABASE_URL="postgresql://postgres:password@localhost:5432eventful?schema=public"
 
 # --- SERVER CONFIGURATION ---
 PORT=3000
@@ -14,6 +14,13 @@ JWT_SECRET="your_super_secret_random_key_here"
 # --- CORS SETTINGS ---
 # The URL where your React app is running
 FRONTEND_URL="http://localhost:5173"
+
+ Install dependencies: `npm install`
+ Configure your `.env` file based on the provided template.
+ Synchronize the database schema:
+   ```bash
+   npx prisma generate
+   npx prisma db push
 
 1. Executive Summary
    Eventful is a full-stack web application designed to streamline event management and ticket purchasing. The platform allows organizers to create events and enables users to discover and purchase tickets through a secure, automated system. The core value proposition is the seamless integration between payment processing and instant digital ticket issuance.
