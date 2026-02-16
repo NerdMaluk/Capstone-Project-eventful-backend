@@ -18,7 +18,7 @@ FRONTEND_URL="http://localhost:5173"
  Install dependencies: `npm install`
  Configure your `.env` file based on the provided template.
  Synchronize the database schema:
-   ```bash
+   docker-compose up -d
    npx prisma generate
    npx prisma db push
 
